@@ -3,30 +3,11 @@ import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
   const host = 'http://localhost:5000';
-  const notesInitial = [
-    {
-      _id: "646857f5eeff9ccefe33084b",
-      user: "6465bc85ee9e60cb368ad3de",
-      title: "My Title",
-      description: "Please wake up early",
-      tag: "personal",
-      date: "2023-05-20T05:17:41.161Z",
-      __v: 0,
-    },
-    {
-      _id: "646874313449e408f448f325",
-      user: "6465bc85ee9e60cb368ad3de",
-      title: "New Note",
-      description: "React JS Course Completed",
-      tag: "youtube",
-      date: "2023-05-20T07:18:09.181Z",
-      __v: 0,
-    },
-  ];
+  const notesInitial = [];
 
   const [notes, setNotes] = useState(notesInitial);
 
-// Add a Note
+// Get all Notes
 const getNotes = async (title, description, tag) => {
   // API call
   const response = await fetch(`${host}/api/notes/fetchallnotes`, {
@@ -51,6 +32,7 @@ const getNotes = async (title, description, tag) => {
       body: JSON.stringify({title, description, tag}), 
     });
     const json = response.json();
+    console.log(json);
 
     console.log("Adding a new note");
     const note = {
@@ -74,6 +56,8 @@ const getNotes = async (title, description, tag) => {
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2NWJjODVlZTllNjBjYjM2OGFkM2RlIn0sImlhdCI6MTY4NDUwMDQxMH0.q8RcVjo50Ss6MpA8YUKpKH4A7QiZAbZZN5f3GUIjxqo"
       },
     });
+    const json = await response.json();
+    console.log(json);
     
     console.log("Deleting the note with id " + id);
     const newNotes = notes.filter((note) => {
@@ -94,6 +78,7 @@ const getNotes = async (title, description, tag) => {
       body: JSON.stringify({title, description, tag}), 
     });
     const json = response.json();
+    console.log(json);
   
     // Logic to edit in client
     for (let index = 0; index < notes.length; index++) {

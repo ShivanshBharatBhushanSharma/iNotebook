@@ -6,16 +6,25 @@ import AddNote from "./AddNote";
 const Notes = () => {
   const context = useContext(noteContext);
   const { notes, getNotes } = context;
-  useEffect(()=> {
+  useEffect(() => {
     getNotes();
-  }, [])
+    // eslint-disable-next-line
+  }, []);
+
+  const updateNote = (note) => {
+
+  };
+
   return (
     <>
       <AddNote />
+
       <div className="row my-3">
         <h2>Your Note</h2>
         {notes.map((note) => {
-          return <NoteItem key={note._id} note={note} />;
+          return (
+            <NoteItem key={note._id} updateNote={updateNote} note={note} />
+          );
         })}
       </div>
     </>
