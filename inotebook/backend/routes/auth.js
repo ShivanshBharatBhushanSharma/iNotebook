@@ -28,9 +28,10 @@ router.post(
       // Check whether the user with this email exists already
       let user = await User.findOne({ email: req.body.email });
       if (user) {
+      const success = false;
         return res
           .status(400)
-          .json({ error: "Sorry a user with this email already exists" });
+          .json({ success, error: "Sorry a user with this email already exists" });
       }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
@@ -46,8 +47,9 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
+      const success = true;
       // res.json(user);
-      res.json({ authToken });
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");
@@ -91,16 +93,18 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+      const success = false;
         return res
           .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+          .json({ success, error: "Please try to login with correct credentials" });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+      const success = false;
         return res
           .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+          .json({ success, error: "Please try to login with correct credentials" });
       }
 
       const data = {
@@ -109,7 +113,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      const success = true;
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");
@@ -117,7 +122,7 @@ router.post(
   }
 );
 
-// Route 3: Get loggedin User Detaisl using: POST "/api/auth/getuser". Login required
+// Route 3: Get loggedin User Details using: POST "/api/auth/getuser". Login required
 router.post("/getuser", fetchuser ,async (req, res) => {
   try {
     const userid = req.user.id;
