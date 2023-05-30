@@ -29,9 +29,12 @@ router.post(
       // Check whether the user with this email exists already
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-      return res
+        return res
           .status(400)
-          .json({ success, error: "Sorry a user with this email already exists" });
+          .json({
+            success,
+            error: "Sorry a user with this email already exists",
+          });
       }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
@@ -86,7 +89,7 @@ router.post(
   async (req, res) => {
     let success = false;
     // If there are errors, return Bad request and the errors
-    const errors = validationResult(req); 
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ success, errors: errors.array() });
     }
@@ -94,16 +97,22 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-      return res
+        return res
           .status(400)
-          .json({ success, error: "Please try to login with correct credentials" });
+          .json({
+            success,
+            error: "Please try to login with correct credentials",
+          });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-      return res
+        return res
           .status(400)
-          .json({ success, error: "Please try to login with correct credentials" });
+          .json({
+            success,
+            error: "Please try to login with correct credentials",
+          });
       }
 
       const data = {
@@ -122,11 +131,11 @@ router.post(
 );
 
 // Route 3: Get loggedin User Details using: POST "/api/auth/getuser". Login required
-router.post("/getuser", fetchuser ,async (req, res) => {
+router.post("/getuser", fetchuser, async (req, res) => {
   try {
     const userid = req.user.id;
     const user = await User.findById(userid).select("-password");
-    res.send(user); 
+    res.send(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

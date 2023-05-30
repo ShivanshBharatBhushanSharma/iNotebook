@@ -1,30 +1,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signup = (props) => {
   const host = "http://localhost:5000";
-  const [credentials, setCredentials] = useState({name: "",email: "", password: "", cpassword: ""});
+  const [credentials, setCredentials] = useState({
+    name: "",
+    email: "",
+    password: "",
+    cpassword: "",
+  });
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const {name, email, password} = credentials;
+    const { name, email, password } = credentials;
     const response = await fetch(`${host}/api/auth/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password}),
+      body: JSON.stringify({ name, email, password }),
     });
     const json = await response.json();
     console.log(json);
-    if(json.success){
-        // Save the auth token and redirect
-        localStorage.setItem('token', json.authtoken)
-        navigate("/");
-    }
-    else{
-        alert("Invalid credentials");
+    if (json.success) {
+      // Save the auth token and redirect
+      localStorage.setItem("token", json.authtoken);
+      navigate("/");
+      props.showAlert("Account Created Successfully", "success");
+    } else {
+      props.showAlert("Invalid Details", "danger");
     }
   };
 
@@ -94,7 +99,7 @@ const Signup = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;
