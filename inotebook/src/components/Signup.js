@@ -38,7 +38,8 @@ const Signup = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-3">
+      <h2 className="my-3">Create an account to use iNotebook</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="email">Name</label>
